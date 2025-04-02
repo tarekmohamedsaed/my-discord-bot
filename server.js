@@ -116,6 +116,14 @@ const client = new Client({
 
 
 //-------------------------------------------اوامر الرصيد -------------#
+client.once('ready', () => {
+console.log(`✅ الحاله الستريمنج شغاله 24 ساعه بوت البنك شغال `)
+    // ✅ تعيين حالة البوت إلى Streaming
+    client.user.setActivity('فلوسك في أمان 💰', {
+        type: ActivityType.Streaming,
+        url: 'https://www.twitch.tv/discord' // لازم يكون URL حقيقي للستريمنج وإلا مش هيشتغل
+    });
+});
 client.once("ready", () => console.log(`✅ Bot is ready as ${client.user.tag}`));
 client.on("messageCreate", async (message) => {
   if (message.author.bot) return;
